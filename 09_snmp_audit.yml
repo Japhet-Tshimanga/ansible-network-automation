@@ -1,0 +1,25 @@
+---
+- name: "Tache 9 - Audit de conformite SNMP"
+  hosts: network
+  gather_facts: false
+  tasks:
+    - name: Lire la configuration SNMP
+      cisco.ios.ios_command:
+        commands: show running-config | include ^snmp-server community
+      register: snmp
+
+    - name: Evaluer la conformite
+      ansible.builtin.set_fact:
+        snmp_ok: "{{ (snmp.stdout[0] | trim | length) > 0 }}"
+
+    - name: Echouer si SNMP absent (sauf mode correction)
+      ansible.builtin.assert:
+        that: snmp_ok or (snmp_remediate | bool)
+        fail_msg: "[NON CONFORME] SNMP desactive sur {{ inventory_hostname }}. Relancez avec -e snmp_remediate=true pour corriger."
+        success_msg: "{{ inventory_hostname }} : SNMP conforme ou correction autorisee"
+
+    - name: Corriger la configuration SNMP
+      cisco.ios.ios_config:
+        lines:
+          - "snmp-server community {{ snmp_community }} RO"
+      when: not snmp_ok and (snmp_remediate | bool)

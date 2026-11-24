@@ -1,0 +1,19 @@
+---
+- name: "Tache 8 - Banniere MOTD via Jinja2"
+  hosts: network
+  gather_facts: false
+  tasks:
+    - name: Deployer la banniere depuis templates/motd.j2
+      cisco.ios.ios_banner:
+        banner: motd
+        text: "{{ lookup('ansible.builtin.template', 'motd.j2') }}"
+        state: present
+
+    - name: Verifier la banniere
+      cisco.ios.ios_command:
+        commands: show running-config | begin banner motd
+      register: banner_check
+
+    - name: Afficher le resultat
+      ansible.builtin.debug:
+        msg: "{{ banner_check.stdout_lines[0][:6] }}"

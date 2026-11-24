@@ -1,0 +1,6 @@
+---
+vlans:
+  - { id: 10, name: Data }
+  - { id: 20, name: Voice }
+  - { id: 30, name: Management }
+  - { id: 99, name: Native }

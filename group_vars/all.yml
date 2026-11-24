@@ -1,0 +1,22 @@
+---
+# Variable globale : serveurs NTP pour tout le parc
+ntp_servers:
+  - 216.239.35.0
+  - 129.6.15.28
+
+# Tache 5 : administrateur (mot de passe stocke sous forme de hash type 5)
+admin_user: netadmin
+admin_privilege: 15
+admin_hash: '$1$ab12$//CMRoT3gIhQutC7Bohmg1'
+domain_name: lab.local
+
+# Forme de la commande domain name selon l'IOS (12.4 des routeurs)
+domain_cmd: "ip domain name"
+
+# Tache 8 : banniere MOTD
+company_name: "ACME Corp - Reseau"
+motd_message: "Acces reserve au personnel autorise. Toute activite est journalisee."
+
+# Tache 9 : audit SNMP
+snmp_community: "LAB-RO-2026"
+snmp_remediate: false

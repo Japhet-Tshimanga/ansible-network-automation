@@ -1,0 +1,23 @@
+---
+- name: "Tache 7 - Interfaces des routeurs (host_vars)"
+  hosts: routers
+  gather_facts: false
+  tasks:
+    - name: Configurer description et adresse IP
+      cisco.ios.ios_config:
+        parents: "interface {{ item.name }}"
+        lines:
+          - "description {{ item.description }}"
+          - "ip address {{ item.ip }} {{ item.mask }}"
+      loop: "{{ interfaces }}"
+      loop_control:
+        label: "{{ item.name }} -> {{ item.ip }}"
+
+    - name: Verifier les adresses
+      cisco.ios.ios_command:
+        commands: show ip interface brief | include Loopback
+      register: ip_check
+
+    - name: Afficher le resultat
+      ansible.builtin.debug:
+        msg: "{{ inventory_hostname }} : {{ ip_check.stdout_lines[0] }}"

@@ -1,0 +1,13 @@
+---
+# Execution complete : un equipement en echec est exclu des plays suivants
+# et apparait dans la section "en echec" du rapport final.
+- import_playbook: 01_ping.yml
+- import_playbook: 02_facts.yml
+- import_playbook: 03_backup.yml
+- import_playbook: 04_ntp.yml
+- import_playbook: 05_users_ssh.yml
+- import_playbook: 06_vlans.yml
+- import_playbook: 07_interfaces.yml
+- import_playbook: 08_banner.yml
+- import_playbook: 09_snmp_audit.yml
+- import_playbook: 10_rapport.yml

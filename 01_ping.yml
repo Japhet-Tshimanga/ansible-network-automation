@@ -1,0 +1,13 @@
+---
+- name: "Tache 1 - Test de connectivite"
+  hosts: network
+  gather_facts: false
+  tasks:
+    - name: Verifier la connexion SSH et l'acces enable
+      cisco.ios.ios_command:
+        commands: show clock
+      register: clock
+
+    - name: Resultat
+      ansible.builtin.debug:
+        msg: "{{ inventory_hostname }} OK - {{ clock.stdout[0] }}"

@@ -1,0 +1,4 @@
+---
+interfaces:
+  - { name: Loopback0,  description: "Loopback R1",   ip: 1.1.1.1,    mask: 255.255.255.255 }
+  - { name: Loopback10, description: "LAN simulee R1", ip: 172.16.1.1, mask: 255.255.255.0 }

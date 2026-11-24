@@ -1,0 +1,16 @@
+---
+- name: "Tache 2 - Collecte des facts"
+  hosts: network
+  gather_facts: false
+  tasks:
+    - name: Collecter les facts
+      cisco.ios.ios_facts:
+        gather_subset: min
+
+    - name: Ecrire version OS + numero de serie dans un fichier local
+      ansible.builtin.template:
+        src: facts.txt.j2
+        dest: "{{ playbook_dir }}/reports/versions_serie.txt"
+        mode: "0644"
+      delegate_to: localhost
+      run_once: true

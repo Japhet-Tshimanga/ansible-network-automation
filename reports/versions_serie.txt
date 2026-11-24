@@ -1,0 +1,4 @@
+# Inventaire OS / numero de serie - 2026-11-24 05:18:30
+R1 | OS: 12.4(24)T5 | Serie: 4279256517 | Modele: 7206VXR
+R2 | OS: 12.4(24)T5 | Serie: 4279256517 | Modele: 7206VXR
+SW1 | OS: 15.1(20130726:213425) | Serie: 2048001 | Modele: n/a

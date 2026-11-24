@@ -1,0 +1,40 @@
+---
+- name: "Tache 5 - Utilisateur admin et SSH"
+  hosts: network
+  gather_facts: false
+  tasks:
+    - name: Utilisateur administrateur (mot de passe hache)
+      cisco.ios.ios_config:
+        lines:
+          - "username {{ admin_user }} privilege {{ admin_privilege }} secret 5 {{ admin_hash }}"
+      no_log: true
+
+    - name: Parametres SSH globaux
+      cisco.ios.ios_config:
+        lines:
+          - "{{ domain_cmd }} {{ domain_name }}"
+          - ip ssh version 2
+
+    - name: Lignes VTY en SSH uniquement
+      cisco.ios.ios_config:
+        parents: line vty 0 4
+        lines:
+          - transport input ssh
+          - login local
+
+    - name: Verifier que SSH est actif
+      cisco.ios.ios_command:
+        commands:
+          - show ip ssh
+          - show running-config | include ^username {{ admin_user }}
+      register: verif
+
+    - name: Assertion SSH
+      ansible.builtin.assert:
+        that: "'SSH Enabled' in verif.stdout[0]"
+        fail_msg: "SSH n'est pas actif sur {{ inventory_hostname }}"
+        success_msg: "SSH actif sur {{ inventory_hostname }}"
+
+    - name: Afficher l'utilisateur (hash masque par l'equipement)
+      ansible.builtin.debug:
+        msg: "{{ inventory_hostname }} : {{ verif.stdout[1] | regex_replace('(secret 5).*', '\\1 ***') }}"

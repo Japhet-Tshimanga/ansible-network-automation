@@ -1,0 +1,23 @@
+# Rapport d'état final
+
+Généré le {{ now().strftime('%d/%m/%Y à %H:%M:%S') }}
+
+## Équipements mis à jour avec succès ({{ ansible_play_hosts | length }})
+
+| Équipement | Groupe | Adresse | Version OS | N° de série |
+|------------|--------|---------|------------|-------------|
+{% for h in ansible_play_hosts %}
+| {{ h }} | {{ hostvars[h].group_names | difference(['network']) | join(', ') }} | {{ hostvars[h].ansible_host }} | {{ hostvars[h].ansible_net_version | default('n/a') }} | {{ hostvars[h].ansible_net_serialnum | default('n/a') }} |
+{% endfor %}
+
+## Équipements en échec ({{ groups['network'] | difference(ansible_play_hosts) | length }})
+
+{% for h in groups['network'] | difference(ansible_play_hosts) %}
+- {{ h }}
+{% else %}
+Aucun.
+{% endfor %}
+
+## Tâches déployées
+
+NTP, utilisateur admin et SSH, VLANs (switches), adresses des interfaces (routeurs), bannière MOTD, audit SNMP.

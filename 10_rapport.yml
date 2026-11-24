@@ -1,0 +1,16 @@
+---
+- name: "Tache 10 - Rapport d'etat final"
+  hosts: network
+  gather_facts: false
+  tasks:
+    - name: Facts (version / serie)
+      cisco.ios.ios_facts:
+        gather_subset: min
+
+    - name: Generer le rapport Markdown
+      ansible.builtin.template:
+        src: rapport.md.j2
+        dest: "{{ playbook_dir }}/reports/rapport.md"
+        mode: "0644"
+      delegate_to: localhost
+      run_once: true
